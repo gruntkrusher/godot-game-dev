@@ -1,0 +1,43 @@
+[gd_scene load_steps=4 format=1]
+
+[ext_resource path="res://scripts/Objects/MineralDrop.gd" type="Script" id=1]
+[ext_resource path="res://assets/images/Sprites/Meteors/spaceMeteors_003.png" type="Texture" id=2]
+
+[sub_resource type="ConvexPolygonShape2D" id=6]
+
+custom_solver_bias = 0.0
+points = Vector2Array( -106.532, -33.6431, -59.7158, -81.435, 3.68164, -112.646, 70.4928, -84.3611, 105.605, -24.3773, 102.679, 41.4584, 68.5421, 99.0038, 2.7063, 112.171, -67.5185, 91.6887, -102.143, 34.631 )
+
+[node name="MineralDrop" type="Node2D"]
+
+transform/pos = Vector2( 500, 0 )
+transform/scale = Vector2( 0.1, 0.1 )
+script/script = ExtResource( 1 )
+
+[node name="PickupArea" type="Area2D" parent="."]
+
+editor/display_folded = true
+input/pickable = true
+shapes/0/shape = SubResource( 6 )
+shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, 0 )
+shapes/0/trigger = false
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="PickupArea"]
+
+build_mode = 0
+polygon = Vector2Array( -106.532, -33.6431, -59.7158, -81.435, 3.68164, -112.646, 70.4928, -84.3611, 105.605, -24.3773, 102.679, 41.4584, 68.5421, 99.0038, 2.7063, 112.171, -67.5185, 91.6887, -102.143, 34.631 )
+shape_range = Vector2( 0, 0 )
+trigger = false
+
+[node name="Sprite" type="Sprite" parent="."]
+
+texture = ExtResource( 2 )
+modulate = Color( 0, 1, 0.953125, 1 )
+
+[connection signal="body_enter" from="PickupArea" to="." method="_on_PickupArea_body_enter"]
+
+

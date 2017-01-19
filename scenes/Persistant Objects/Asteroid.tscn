@@ -1,0 +1,67 @@
+[gd_scene load_steps=7 format=1]
+
+[ext_resource path="res://scripts/Objects/Asteroid.gd" type="Script" id=1]
+[ext_resource path="res://scenes/Effects/Dust Particle Effect.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/Persistant Objects/MineralDrop.tscn" type="PackedScene" id=3]
+[ext_resource path="res://assets/images/Sprites/Meteors/spaceMeteors_001.png" type="Texture" id=4]
+
+[sub_resource type="ConvexPolygonShape2D" id=4]
+
+custom_solver_bias = 0.0
+points = Vector2Array( -71.5928, -81.2643, 2.65051, -105.214, 62.5241, -86.0542, 105.633, -29.773, 102.639, 39.0816, 64.919, 83.388, -2.73813, 104.943, -71.5928, 97.7577, -102.727, 30.1005, -106.918, -33.9642 )
+
+[sub_resource type="ConvexPolygonShape2D" id=5]
+
+custom_solver_bias = 0.0
+points = Vector2Array( -106.625, -36.2924, -69.0737, -85.0596, 7.49078, -110.419, 68.4498, -90.424, 112.828, -33.8541, 109.414, 37.3461, 71.3758, 85.6256, 2.61404, 106.108, -68.5861, 98.7927, -101.748, 29.0556 )
+
+[node name="Asteroid" type="KinematicBody2D"]
+
+editor/display_folded = true
+transform/pos = Vector2( -500, 0 )
+input/pickable = false
+shapes/0/shape = SubResource( 4 )
+shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, 0 )
+shapes/0/trigger = false
+collision/layers = 1
+collision/mask = 1
+collision/margin = 0.08
+script/script = ExtResource( 1 )
+effect = ExtResource( 2 )
+drop_item = ExtResource( 3 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+
+build_mode = 0
+polygon = Vector2Array( -71.5928, -81.2643, 2.65051, -105.214, 62.5241, -86.0542, 105.633, -29.773, 102.639, 39.0816, 64.919, 83.388, -2.73813, 104.943, -71.5928, 97.7577, -102.727, 30.1005, -106.918, -33.9642 )
+shape_range = Vector2( 0, 0 )
+trigger = false
+
+[node name="Sprite" type="Sprite" parent="."]
+
+texture = ExtResource( 4 )
+
+[node name="Area2D" type="Area2D" parent="."]
+
+input/pickable = true
+shapes/0/shape = SubResource( 5 )
+shapes/0/transform = Matrix32( 1, 0, 0, 1, -4.51251, 1.80499 )
+shapes/0/trigger = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="Area2D"]
+
+transform/pos = Vector2( -4.51251, 1.80499 )
+build_mode = 0
+polygon = Vector2Array( -106.625, -36.2924, -69.0737, -85.0596, 7.49078, -110.419, 68.4498, -90.424, 112.828, -33.8541, 109.414, 37.3461, 71.3758, 85.6256, 2.61404, 106.108, -68.5861, 98.7927, -101.748, 29.0556 )
+shape_range = Vector2( 0, 0 )
+trigger = true
+
+[connection signal="area_enter" from="Area2D" to="." method="_on_Area2D_area_enter"]
+
+[connection signal="body_enter" from="Area2D" to="." method="_on_Area2D_body_enter"]
+
+

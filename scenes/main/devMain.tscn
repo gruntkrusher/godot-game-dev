@@ -1,0 +1,225 @@
+[gd_scene load_steps=14 format=1]
+
+[ext_resource path="res://scripts/devMain.gd" type="Script" id=1]
+[ext_resource path="res://scenes/Persistant Objects/Asteroid.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scripts/HUD/HUD.gd" type="Script" id=3]
+[ext_resource path="res://assets/fonts/Gabriola.fnt" type="BitmapFont" id=4]
+[ext_resource path="res://assets/images/background.png" type="Texture" id=5]
+[ext_resource path="res://scripts/player/PlayerShip.gd" type="Script" id=6]
+[ext_resource path="res://scenes/LaserRound.tscn" type="PackedScene" id=7]
+[ext_resource path="res://assets/images/PlayerShip.png" type="Texture" id=8]
+[ext_resource path="res://assets/images/Sprites/Effects/spaceEffects_001.png" type="Texture" id=9]
+[ext_resource path="res://scripts/Camera/PlayerShipCamera.gd" type="Script" id=10]
+
+[sub_resource type="SegmentShape2D" id=1]
+
+custom_solver_bias = 0.0
+a = Vector2( 8.78345, -10.4738 )
+b = Vector2( 8.47864, 12.2858 )
+
+[sub_resource type="SegmentShape2D" id=2]
+
+custom_solver_bias = 0.0
+a = Vector2( -4.80053, 11.1544 )
+b = Vector2( 7.2381, 11.1544 )
+
+[sub_resource type="ConvexPolygonShape2D" id=3]
+
+custom_solver_bias = 0.0
+points = Vector2Array( -49.5845, 7.51732, -37.3961, -32.6329, -25.5661, -35.8592, 24.6216, -36.2177, 38.244, -32.2744, 50.074, 8.59277, 27.848, 36.913, -27, 36.913 )
+
+[node name="main" type="Node2D" groups=[ "Missiles" ]]
+
+script/script = ExtResource( 1 )
+asteroid_prefab = ExtResource( 2 )
+
+[node name="HUD_root" type="CanvasLayer" parent="."]
+
+editor/display_folded = true
+layer = 1
+offset = Vector2( 0, 0 )
+rotation = 0.0
+scale = Vector2( 1, 1 )
+script/script = ExtResource( 3 )
+
+[node name="Speed" type="Label" parent="HUD_root"]
+
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = 107.0
+margin/top = 97.0
+margin/right = 462.0
+margin/bottom = 153.0
+custom_fonts/font = ExtResource( 4 )
+text = "Speed : 0%"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="Minerals" type="Label" parent="HUD_root"]
+
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = 100.0
+margin/top = 40.0
+margin/right = 373.0
+margin/bottom = 117.0
+custom_fonts/font = ExtResource( 4 )
+text = "Minerals : 0"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="background" type="Sprite" parent="."]
+
+visibility/behind_parent = true
+transform/pos = Vector2( 9600, 5400 )
+transform/scale = Vector2( 10, 10 )
+texture = ExtResource( 5 )
+
+[node name="Bounding Box " type="Node2D" parent="background" groups=[ "Walls" ]]
+
+[node name="Left Right" type="StaticBody2D" parent="background/Bounding Box " groups=[ "Walls", "LR" ]]
+
+input/pickable = false
+shapes/0/shape = SubResource( 1 )
+shapes/0/transform = Matrix32( 3.44925, 0, 0, 47.4815, -988.619, -43.5269 )
+shapes/0/trigger = false
+shapes/1/shape = SubResource( 1 )
+shapes/1/transform = Matrix32( 3.44925, 0, 0, 47.4815, 929.036, -42.1433 )
+shapes/1/trigger = false
+collision/layers = 1
+collision/mask = 1
+constant_linear_velocity = Vector2( 0, 0 )
+constant_angular_velocity = 0.0
+friction = 1.0
+bounce = 0.0
+
+[node name="LeftWall" type="CollisionShape2D" parent="background/Bounding Box /Left Right"]
+
+transform/pos = Vector2( -988.619, -43.5269 )
+transform/scale = Vector2( 3.44925, 47.4815 )
+shape = SubResource( 1 )
+trigger = false
+_update_shape_index = 0
+
+[node name="RightWall" type="CollisionShape2D" parent="background/Bounding Box /Left Right"]
+
+transform/pos = Vector2( 929.036, -42.1433 )
+transform/scale = Vector2( 3.44925, 47.4815 )
+shape = SubResource( 1 )
+trigger = false
+_update_shape_index = 1
+
+[node name="Upper Lower" type="StaticBody2D" parent="background/Bounding Box " groups=[ "UL", "Walls" ]]
+
+input/pickable = false
+shapes/0/shape = SubResource( 2 )
+shapes/0/transform = Matrix32( 159.411, 0, 0, 7.30275, -193.775, -620.923 )
+shapes/0/trigger = false
+shapes/1/shape = SubResource( 2 )
+shapes/1/transform = Matrix32( 159.411, 0, 0, 7.30273, -195.45, 458.403 )
+shapes/1/trigger = false
+collision/layers = 1
+collision/mask = 1
+constant_linear_velocity = Vector2( 0, 0 )
+constant_angular_velocity = 0.0
+friction = 1.0
+bounce = 0.0
+
+[node name="UpperWall" type="CollisionShape2D" parent="background/Bounding Box /Upper Lower"]
+
+transform/pos = Vector2( -193.775, -620.923 )
+transform/scale = Vector2( 159.411, 7.30275 )
+shape = SubResource( 2 )
+trigger = false
+_update_shape_index = 0
+
+[node name="LowerWall" type="CollisionShape2D" parent="background/Bounding Box /Upper Lower"]
+
+transform/pos = Vector2( -195.45, 458.403 )
+transform/scale = Vector2( 159.411, 7.30273 )
+shape = SubResource( 2 )
+trigger = false
+_update_shape_index = 1
+
+[node name="PlayerShip" type="KinematicBody2D" parent="."]
+
+transform/pos = Vector2( 9460, 5400 )
+input/pickable = false
+shapes/0/shape = SubResource( 3 )
+shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, 0 )
+shapes/0/trigger = false
+collision/layers = 1
+collision/mask = 1
+collision/margin = 0.08
+script/script = ExtResource( 6 )
+bullet = ExtResource( 7 )
+laser = ExtResource( 7 )
+
+[node name="BodyCollider" type="CollisionPolygon2D" parent="PlayerShip"]
+
+build_mode = 0
+polygon = Vector2Array( -27, 36.913, 27.848, 36.913, 50.074, 8.59277, 38.244, -32.2744, 24.6216, -36.2177, -25.5661, -35.8592, -37.3961, -32.6329, -49.5845, 7.51732 )
+shape_range = Vector2( 0, 0 )
+trigger = false
+
+[node name="Sprite" type="Sprite" parent="PlayerShip"]
+
+texture = ExtResource( 8 )
+
+[node name="Muzzle" type="Area2D" parent="PlayerShip"]
+
+transform/pos = Vector2( 0, 50 )
+transform/scale = Vector2( 0.341828, 0.329292 )
+input/pickable = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+
+[node name="thrusterEffect" type="Node2D" parent="PlayerShip"]
+
+editor/display_folded = true
+visibility/visible = false
+transform/pos = Vector2( 0, -50 )
+
+[node name="Sprite1" type="Sprite" parent="PlayerShip/thrusterEffect"]
+
+transform/pos = Vector2( 20, 0 )
+transform/rot = 180.0
+texture = ExtResource( 9 )
+
+[node name="Sprite2" type="Sprite" parent="PlayerShip/thrusterEffect"]
+
+transform/pos = Vector2( -20, 0 )
+transform/rot = 180.0
+texture = ExtResource( 9 )
+
+[node name="Camera2D" type="Camera2D" parent="PlayerShip"]
+
+anchor_mode = 1
+rotating = false
+current = true
+zoom = Vector2( 1, 1 )
+limit/left = -10000000
+limit/top = -10000000
+limit/right = 10000000
+limit/bottom = 10000000
+drag_margin/h_enabled = true
+drag_margin/v_enabled = true
+smoothing/enable = false
+smoothing/speed = 5.0
+drag_margin/left = 0.2
+drag_margin/top = 0.2
+drag_margin/right = 0.2
+drag_margin/bottom = 0.2
+script/script = ExtResource( 10 )
+
+[node name="BulletHolder" type="Node2D" parent="."]
+
+
