@@ -17,11 +17,12 @@ var stablizer_acc = 5        # acceleration force applied by stabilizers
 
 var minShootWait = 0.25      # time between cannon shots
 var shoot_wait = 0           # time since last shot
-var mining_dist = 300
-var mining_dps = 40
+var mining_dist = 300        # distance infront of ship laser reaches
+var mining_dps = 40          # damage per second of mining laser
 
-
+# Player Inventory
 var minerals = 0             # Number of minerals collected
+var credits = 0
 
 # Class Functions
 
@@ -29,6 +30,7 @@ func _ready():
 	set_process(true)
 	set_process_input(true)
 	pass
+	
 	
 func _process(delta):
 	
@@ -115,6 +117,9 @@ func detect_coll():
 			var norm = get_pos() - get_collider().get_pos()
 			norm = norm.normalized()
 			velocity = velocity - 2 * norm.dot(velocity) * norm
+
+func add_credits(num):
+	credits += int(num)
 
 func add_minerals(num):
 	minerals += int(num)

@@ -19,8 +19,12 @@ func _process(delta):
 	speed = floor(speed / maxSpeed * 100)
 	
 	# Display Speed
-	get_node("speed_label").set_text("Speed : " + str(speed) + "%")
+	get_node("location_label").set_text("X : " + str(int(player.get_pos().x)/100) + "  Y : " + str(int(player.get_pos().y)/100))
 	
 	# Display Minerals
 	var minerals = player.get("minerals")
 	get_node("minerals_label").set_text("Minerals : " + str(minerals))
+	
+	# Display Credits
+	var credits = player.get("credits")
+	get_node("credits_label").set_text("Credits : " + str(credits))

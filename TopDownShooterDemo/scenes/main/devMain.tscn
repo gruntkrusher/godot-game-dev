@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=1]
+[gd_scene load_steps=22 format=1]
 
 [ext_resource path="res://scripts/devMain.gd" type="Script" id=1]
 [ext_resource path="res://scenes/Persistant Objects/Asteroid.tscn" type="PackedScene" id=2]
@@ -14,7 +14,9 @@
 [ext_resource path="res://scripts/Camera/PlayerShipCamera.gd" type="Script" id=12]
 [ext_resource path="res://scripts/Objects/SpaceStation.gd" type="Script" id=13]
 [ext_resource path="res://assets/images/Sprites/Station/spaceStation_020.png" type="Texture" id=14]
-[ext_resource path="res://assets/fonts/KennyFnt20.fnt" type="BitmapFont" id=15]
+[ext_resource path="res://scripts/Objects/space_station_shop_minerals/space_station_shop.gd" type="Script" id=15]
+[ext_resource path="res://assets/fonts/KennyFnt20.fnt" type="BitmapFont" id=16]
+[ext_resource path="res://assets/fonts/KennyFnt14.fnt" type="BitmapFont" id=17]
 
 [sub_resource type="SegmentShape2D" id=1]
 
@@ -28,7 +30,7 @@ custom_solver_bias = 0.0
 a = Vector2( -4.8079, 11.0665 )
 b = Vector2( 7.2381, 11.1544 )
 
-[sub_resource type="ConvexPolygonShape2D" id=6]
+[sub_resource type="ConvexPolygonShape2D" id=3]
 
 custom_solver_bias = 0.0
 points = Vector2Array( -49.5845, 7.51732, -37.3961, -32.6329, -25.5661, -35.8592, 24.6216, -36.2177, 38.244, -32.2744, 50.074, 8.59277, 27.848, 36.913, -27, 36.913 )
@@ -52,18 +54,18 @@ rotation = 0.0
 scale = Vector2( 1, 1 )
 script/script = ExtResource( 3 )
 
-[node name="speed_label" type="Label" parent="hud_root"]
+[node name="location_label" type="Label" parent="hud_root"]
 
 focus/ignore_mouse = true
 focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 0
-margin/left = 107.0
-margin/top = 97.0
-margin/right = 462.0
-margin/bottom = 153.0
+margin/left = 100.0
+margin/top = 150.0
+margin/right = 492.0
+margin/bottom = 206.0
 custom_fonts/font = ExtResource( 4 )
-text = "Speed : 0%"
+text = "X: NA Y: NA"
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
@@ -75,9 +77,9 @@ focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 0
 margin/left = 100.0
-margin/top = 40.0
-margin/right = 373.0
-margin/bottom = 117.0
+margin/top = 50.0
+margin/right = 585.0
+margin/bottom = 127.0
 custom_fonts/font = ExtResource( 4 )
 text = "Minerals : 0"
 percent_visible = 1.0
@@ -100,6 +102,22 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
+[node name="credits_label" type="Label" parent="hud_root"]
+
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = 100.0
+margin/top = 100.0
+margin/right = 535.0
+margin/bottom = 146.0
+custom_fonts/font = ExtResource( 4 )
+text = "Credits : 0 "
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
 [node name="background" type="Sprite" parent="."]
 
 editor/display_folded = true
@@ -112,7 +130,7 @@ texture = ExtResource( 5 )
 
 editor/display_folded = true
 
-[node name="left_right_body" type="StaticBody2D" parent="background/bounding_box" groups=[ "LR", "Walls" ]]
+[node name="left_right_body" type="StaticBody2D" parent="background/bounding_box" groups=[ "Walls", "LR" ]]
 
 editor/display_folded = true
 input/pickable = false
@@ -145,7 +163,7 @@ shape = SubResource( 1 )
 trigger = false
 _update_shape_index = 1
 
-[node name="upper_lower_body" type="StaticBody2D" parent="background/bounding_box" groups=[ "UL", "Walls" ]]
+[node name="upper_lower_body" type="StaticBody2D" parent="background/bounding_box" groups=[ "Walls", "UL" ]]
 
 editor/display_folded = true
 input/pickable = false
@@ -183,7 +201,7 @@ _update_shape_index = 1
 editor/display_folded = true
 transform/pos = Vector2( 9460, 5400 )
 input/pickable = false
-shapes/0/shape = SubResource( 6 )
+shapes/0/shape = SubResource( 3 )
 shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, 0 )
 shapes/0/trigger = false
 collision/layers = 1
@@ -293,14 +311,16 @@ texture = ExtResource( 14 )
 
 [node name="shop_ui" type="Control" parent="space_station"]
 
+rect/scale = Vector2( 2, 2 )
 focus/ignore_mouse = false
 focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 2
 margin/left = 76.0
 margin/top = -155.0
-margin/right = 116.0
-margin/bottom = -115.0
+margin/right = 382.0
+margin/bottom = 89.0
+script/script = ExtResource( 15 )
 
 [node name="Panel" type="Panel" parent="space_station/shop_ui"]
 
@@ -313,7 +333,7 @@ margin/top = 0.0
 margin/right = 306.0
 margin/bottom = 243.0
 
-[node name="shop_tabs" type="TabContainer" parent="space_station/shop_ui"]
+[node name="shop_tabs" type="TabContainer" parent="space_station/shop_ui/Panel"]
 
 focus/ignore_mouse = false
 focus/stop_mouse = true
@@ -323,11 +343,11 @@ margin/left = 0.0
 margin/top = 0.0
 margin/right = 306.0
 margin/bottom = 59.0
-custom_fonts/font = ExtResource( 15 )
+custom_fonts/font = ExtResource( 16 )
 tab_align = 0
 tabs_visible = true
 
-[node name="sell" type="Tabs" parent="space_station/shop_ui/shop_tabs"]
+[node name="sell" type="Tabs" parent="space_station/shop_ui/Panel/shop_tabs"]
 
 anchor/right = 1
 anchor/bottom = 1
@@ -335,12 +355,64 @@ focus/ignore_mouse = false
 focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 2
-margin/left = 4.0
-margin/top = 34.0
-margin/right = 4.0
-margin/bottom = 4.0
+margin/left = 3.0
+margin/top = 33.0
+margin/right = 5.0
+margin/bottom = -174.0
 
-[node name="buy" type="Tabs" parent="space_station/shop_ui/shop_tabs"]
+[node name="minerals" type="Node2D" parent="space_station/shop_ui/Panel/shop_tabs/sell"]
+
+[node name="minerals_label" type="Label" parent="space_station/shop_ui/Panel/shop_tabs/sell/minerals"]
+
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = 48.0
+margin/top = 34.0
+margin/right = 266.0
+margin/bottom = 48.0
+custom_fonts/font = ExtResource( 17 )
+text = "100 Minerals for 10 cr"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="minerals_button" type="Button" parent="space_station/shop_ui/Panel/shop_tabs/sell/minerals"]
+
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 57.0
+margin/top = 53.0
+margin/right = 117.0
+margin/bottom = 73.0
+custom_fonts/font = ExtResource( 17 )
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+text = "Sell"
+flat = false
+
+[node name="all_button" type="Button" parent="space_station/shop_ui/Panel/shop_tabs/sell/minerals"]
+
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 147.0
+margin/top = 53.0
+margin/right = 247.0
+margin/bottom = 73.0
+custom_fonts/font = ExtResource( 17 )
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+text = "Sell All"
+flat = false
+
+[node name="buy" type="Tabs" parent="space_station/shop_ui/Panel/shop_tabs"]
 
 visibility/visible = false
 anchor/right = 1
@@ -353,5 +425,9 @@ margin/left = 4.0
 margin/top = 34.0
 margin/right = 4.0
 margin/bottom = 4.0
+
+[connection signal="pressed" from="space_station/shop_ui/Panel/shop_tabs/sell/minerals/minerals_button" to="space_station/shop_ui" method="_on_minerals_button_pressed"]
+
+[connection signal="pressed" from="space_station/shop_ui/Panel/shop_tabs/sell/minerals/all_button" to="space_station/shop_ui" method="_on_all_button_pressed"]
 
 
