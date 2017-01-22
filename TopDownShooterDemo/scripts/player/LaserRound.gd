@@ -1,3 +1,8 @@
+#	LaserRound.gd
+#	Author: Jacob Lindey
+#	Last Change: 1/21/2017
+
+
 extends Node2D
 
 var speed = 20
@@ -17,6 +22,6 @@ func _process(delta):
 
 func _on_Area2D_body_enter( body ):
 	
-	if(body.get_name() != "PlayerShip"):
+	if(body.get_name() != "player_ship"):
 		queue_free()
 		

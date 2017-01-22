@@ -1,3 +1,7 @@
+#	Asteroid.gd
+#	Author: Jacob Lindey
+#	Last Change: 1/21/2017
+
 extends KinematicBody2D
 
 # Class Vars
@@ -15,6 +19,7 @@ var maxDrops = 7
 
 func _ready():
 	curr_health = max_health
+	add_to_group("mine-able")
 	set_process(true)
 	
 func _process(delta):
@@ -43,7 +48,7 @@ func _on_Area2D_area_enter( area ):
 	# Spawn Dust Particle Effect at point of impact
 	var clone = effect.instance()
 	clone.set_global_pos(area.get_global_pos())
-	get_tree().get_root().get_node("main").get_node("BulletHolder").add_child(clone);
+	get_tree().get_root().get_node("main").get_node("bullet_holder").add_child(clone);
 
 
 func _on_Area2D_body_enter( body ):
@@ -53,22 +58,25 @@ func _on_Area2D_body_enter( body ):
 		var dist = body.get_pos() - get_pos()
 		var len = sqrt(dist.x * dist.x + dist.y * dist.y)
 		clone.set_global_pos(get_pos() + Vector2(110 * dist.x / len, 100 * dist.y / len))
-		get_tree().get_root().get_node("main").get_node("BulletHolder").add_child(clone);
+		get_tree().get_root().get_node("main").get_node("bullet_holder").add_child(clone);
 
 func _death():
 	
 	# Dust Particle Effect
 	var clone = effect.instance()
 	clone.set_global_pos( get_global_pos())
-	get_tree().get_root().get_node("main").get_node("BulletHolder").add_child(clone)
+	get_tree().get_root().get_node("main").get_node("bullet_holder").add_child(clone)
 	clone.scale( Vector2(4, 4))
 		
 	# Spawn Drops
 	var randDrops = randi() % (maxDrops - minDrops + 1) + minDrops
 	for d in range(randDrops):
 		var clone = drop_item.instance()
-		get_tree().get_root().get_node("main").get_node("BulletHolder").add_child(clone)
+		get_tree().get_root().get_node("main").get_node("bullet_holder").add_child(clone)
 		clone.set_global_pos(get_global_pos() + Vector2( randi() % 200 - 100.0, randi() % 200 - 100.0))
 	
 	# destroy asteroid
 	queue_free()
+	
+func deal_damage(damage):
+	curr_health -= damage

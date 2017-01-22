@@ -1,3 +1,7 @@
+#	DustParticleEffect.gd
+#	Author: Jacob Lindey
+#	Last Change: 1/21/2017
+
 extends Node2D
 
 # Class vars

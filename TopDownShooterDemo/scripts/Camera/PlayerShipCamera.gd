@@ -1,3 +1,7 @@
+#	PlayerShipCamera.gd
+#	Author: Jacob Lindey
+#	Last Change: 1/21/2017
+
 extends Camera2D
 
 func _ready():
