@@ -28,3 +28,8 @@ func _process(delta):
 	# Display Credits
 	var credits = player.get("credits")
 	get_node("credits_label").set_text("Credits : " + str(credits))
+	
+	# Display Fuel
+	var fuel = player.get("fuel")
+	fuel /= player.get("max_fuel") / 100.0
+	get_node("fuel_label").set_text("Fuel : " + str(int(fuel)) + " %")

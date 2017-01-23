@@ -9,12 +9,17 @@ extends KinematicBody2D
 export(PackedScene) var bullet    # round used when shooting
 export(PackedScene) var laser     # pellet for laser simulation
 onready var bulletHolder = get_parent().get_node("bullet_holder")  # Holder object for all rounds
+onready var station = get_tree().get_root().get_node("main").get_node("space_station") 
 
 var velocity = Vector2(0,0)  # Velocity in X and Y
+
+# Movement Info
 var maxVel = 30              # max magnitude of velocity
 var thruster_acc = 10        # acceleration force applied by main thruster
-var stablizer_acc = 5        # acceleration force applied by stabilizers
+var stablizer_acc = 2        # acceleration force applied by stabilizers
+var fuel_per_sec = 0.2       # fuel used per second while thrusting
 
+# Weapon Info
 var minShootWait = 0.25      # time between cannon shots
 var shoot_wait = 0           # time since last shot
 var mining_dist = 300        # distance infront of ship laser reaches
@@ -22,7 +27,9 @@ var mining_dps = 40          # damage per second of mining laser
 
 # Player Inventory
 var minerals = 0             # Number of minerals collected
-var credits = 0
+var credits = 0              # Number of credits owned
+var fuel = 100.0
+var max_fuel = 100.0
 
 # Class Functions
 
@@ -47,9 +54,18 @@ func _process(delta):
 func _movement(delta):
 	# Get Input from player
 	if(Input.is_action_pressed("thrust")):
+		
+		# Find finding direction
 		var dir = Vector2( sin(get_rot()), cos(get_rot())).normalized()
-		velocity += dir * thruster_acc * delta
+		# Determine new velocity
+		if(fuel > 0):
+			velocity += dir * thruster_acc * delta
+			fuel -= fuel_per_sec * delta
+		else:
+			velocity += dir * stablizer_acc * delta
+		# Set Thruster Effect
 		get_node("thruster_effect").set_hidden(false)
+		
 	elif( velocity.length_squared() > 0):
 		get_node("thruster_effect").set_hidden(true)
 		var dir = velocity.normalized()
@@ -123,3 +139,8 @@ func add_credits(num):
 
 func add_minerals(num):
 	minerals += int(num)
+
+func add_fuel(num):
+	fuel += num
+	if(fuel > max_fuel):
+		fuel = max_fuel

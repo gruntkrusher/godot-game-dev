@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=1]
+[gd_scene load_steps=23 format=1]
 
 [ext_resource path="res://scripts/devMain.gd" type="Script" id=1]
 [ext_resource path="res://scenes/Persistant Objects/Asteroid.tscn" type="PackedScene" id=2]
@@ -14,9 +14,9 @@
 [ext_resource path="res://scripts/Camera/PlayerShipCamera.gd" type="Script" id=12]
 [ext_resource path="res://scripts/Objects/SpaceStation.gd" type="Script" id=13]
 [ext_resource path="res://assets/images/Sprites/Station/spaceStation_020.png" type="Texture" id=14]
-[ext_resource path="res://scripts/Objects/space_station_shop_minerals/space_station_shop.gd" type="Script" id=15]
-[ext_resource path="res://assets/fonts/KennyFnt20.fnt" type="BitmapFont" id=16]
-[ext_resource path="res://assets/fonts/KennyFnt14.fnt" type="BitmapFont" id=17]
+[ext_resource path="res://assets/fonts/KennyFnt20.fnt" type="BitmapFont" id=15]
+[ext_resource path="res://assets/fonts/KennyFnt14.fnt" type="BitmapFont" id=16]
+[ext_resource path="res://scripts/Objects/space_station_shop_minerals/space_station_shop.gd" type="Script" id=17]
 
 [sub_resource type="SegmentShape2D" id=1]
 
@@ -41,6 +41,10 @@ custom_solver_bias = 0.0
 radius = 21.0859
 height = 20.0
 
+[sub_resource type="Theme" id=5]
+
+default_font = ExtResource( 16 )
+
 [node name="main" type="Node2D" groups=[ "Missiles" ]]
 
 script/script = ExtResource( 1 )
@@ -48,6 +52,7 @@ asteroid_prefab = ExtResource( 2 )
 
 [node name="hud_root" type="CanvasLayer" parent="."]
 
+editor/display_folded = true
 layer = 1
 offset = Vector2( 0, 0 )
 rotation = 0.0
@@ -118,6 +123,22 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
+[node name="fuel_label" type="Label" parent="hud_root"]
+
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = 100.0
+margin/top = 1000.0
+margin/right = 535.0
+margin/bottom = 1053.0
+custom_fonts/font = ExtResource( 4 )
+text = "Fuel : 100 %"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
 [node name="background" type="Sprite" parent="."]
 
 editor/display_folded = true
@@ -130,7 +151,7 @@ texture = ExtResource( 5 )
 
 editor/display_folded = true
 
-[node name="left_right_body" type="StaticBody2D" parent="background/bounding_box" groups=[ "Walls", "LR" ]]
+[node name="left_right_body" type="StaticBody2D" parent="background/bounding_box" groups=[ "LR", "Walls" ]]
 
 editor/display_folded = true
 input/pickable = false
@@ -163,7 +184,7 @@ shape = SubResource( 1 )
 trigger = false
 _update_shape_index = 1
 
-[node name="upper_lower_body" type="StaticBody2D" parent="background/bounding_box" groups=[ "Walls", "UL" ]]
+[node name="upper_lower_body" type="StaticBody2D" parent="background/bounding_box" groups=[ "UL", "Walls" ]]
 
 editor/display_folded = true
 input/pickable = false
@@ -198,7 +219,6 @@ _update_shape_index = 1
 
 [node name="player_ship" type="KinematicBody2D" parent="."]
 
-editor/display_folded = true
 transform/pos = Vector2( 9460, 5400 )
 input/pickable = false
 shapes/0/shape = SubResource( 3 )
@@ -225,7 +245,6 @@ texture = ExtResource( 8 )
 
 [node name="muzzle" type="Area2D" parent="player_ship"]
 
-editor/display_folded = true
 transform/pos = Vector2( 0, 50 )
 input/pickable = true
 gravity_vec = Vector2( 0, 1 )
@@ -243,6 +262,7 @@ texture = ExtResource( 9 )
 [node name="mining_hit_sprite" type="Sprite" parent="player_ship/muzzle"]
 
 visibility/visible = false
+transform/rot = 45.0
 texture = ExtResource( 10 )
 
 [node name="thruster_effect" type="Node2D" parent="player_ship"]
@@ -273,8 +293,8 @@ limit/left = -10000000
 limit/top = -10000000
 limit/right = 10000000
 limit/bottom = 10000000
-drag_margin/h_enabled = true
-drag_margin/v_enabled = true
+drag_margin/h_enabled = false
+drag_margin/v_enabled = false
 smoothing/enable = false
 smoothing/speed = 5.0
 drag_margin/left = 0.2
@@ -287,6 +307,7 @@ script/script = ExtResource( 12 )
 
 [node name="space_station" type="KinematicBody2D" parent="."]
 
+editor/display_folded = true
 transform/pos = Vector2( 9600, 5400 )
 input/pickable = false
 shapes/0/shape = SubResource( 4 )
@@ -309,21 +330,40 @@ _update_shape_index = 0
 
 texture = ExtResource( 14 )
 
+[node name="hud_tag" type="Label" parent="space_station"]
+
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = -98.0
+margin/top = -212.0
+margin/right = 101.0
+margin/bottom = -196.0
+custom_fonts/font = ExtResource( 15 )
+text = "Space Station"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
 [node name="shop_ui" type="Control" parent="space_station"]
 
+editor/display_folded = true
 rect/scale = Vector2( 2, 2 )
 focus/ignore_mouse = false
 focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 2
+theme/theme = SubResource( 5 )
 margin/left = 76.0
 margin/top = -155.0
 margin/right = 382.0
 margin/bottom = 89.0
-script/script = ExtResource( 15 )
+script/script = ExtResource( 17 )
 
-[node name="Panel" type="Panel" parent="space_station/shop_ui"]
+[node name="shop_panel" type="Panel" parent="space_station/shop_ui"]
 
+editor/display_folded = true
 focus/ignore_mouse = false
 focus/stop_mouse = true
 size_flags/horizontal = 2
@@ -333,7 +373,7 @@ margin/top = 0.0
 margin/right = 306.0
 margin/bottom = 243.0
 
-[node name="shop_tabs" type="TabContainer" parent="space_station/shop_ui/Panel"]
+[node name="shop_tabs" type="TabContainer" parent="space_station/shop_ui/shop_panel"]
 
 focus/ignore_mouse = false
 focus/stop_mouse = true
@@ -343,11 +383,11 @@ margin/left = 0.0
 margin/top = 0.0
 margin/right = 306.0
 margin/bottom = 59.0
-custom_fonts/font = ExtResource( 16 )
+custom_fonts/font = ExtResource( 15 )
 tab_align = 0
 tabs_visible = true
 
-[node name="sell" type="Tabs" parent="space_station/shop_ui/Panel/shop_tabs"]
+[node name="sell" type="Tabs" parent="space_station/shop_ui/shop_panel/shop_tabs"]
 
 anchor/right = 1
 anchor/bottom = 1
@@ -355,14 +395,14 @@ focus/ignore_mouse = false
 focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 2
-margin/left = 3.0
-margin/top = 33.0
-margin/right = 5.0
-margin/bottom = -174.0
+margin/left = 4.0
+margin/top = 34.0
+margin/right = 4.0
+margin/bottom = 4.0
 
-[node name="minerals" type="Node2D" parent="space_station/shop_ui/Panel/shop_tabs/sell"]
+[node name="minerals" type="Node2D" parent="space_station/shop_ui/shop_panel/shop_tabs/sell"]
 
-[node name="minerals_label" type="Label" parent="space_station/shop_ui/Panel/shop_tabs/sell/minerals"]
+[node name="minerals_label" type="Label" parent="space_station/shop_ui/shop_panel/shop_tabs/sell/minerals"]
 
 focus/ignore_mouse = true
 focus/stop_mouse = true
@@ -372,13 +412,13 @@ margin/left = 48.0
 margin/top = 34.0
 margin/right = 266.0
 margin/bottom = 48.0
-custom_fonts/font = ExtResource( 17 )
+custom_fonts/font = ExtResource( 16 )
 text = "100 Minerals for 10 cr"
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="minerals_button" type="Button" parent="space_station/shop_ui/Panel/shop_tabs/sell/minerals"]
+[node name="minerals_button" type="Button" parent="space_station/shop_ui/shop_panel/shop_tabs/sell/minerals"]
 
 focus/ignore_mouse = false
 focus/stop_mouse = true
@@ -388,14 +428,14 @@ margin/left = 57.0
 margin/top = 53.0
 margin/right = 117.0
 margin/bottom = 73.0
-custom_fonts/font = ExtResource( 17 )
+custom_fonts/font = ExtResource( 16 )
 toggle_mode = false
 enabled_focus_mode = 2
 shortcut = null
 text = "Sell"
 flat = false
 
-[node name="all_button" type="Button" parent="space_station/shop_ui/Panel/shop_tabs/sell/minerals"]
+[node name="minerals_all_button" type="Button" parent="space_station/shop_ui/shop_panel/shop_tabs/sell/minerals"]
 
 focus/ignore_mouse = false
 focus/stop_mouse = true
@@ -405,14 +445,14 @@ margin/left = 147.0
 margin/top = 53.0
 margin/right = 247.0
 margin/bottom = 73.0
-custom_fonts/font = ExtResource( 17 )
+custom_fonts/font = ExtResource( 16 )
 toggle_mode = false
 enabled_focus_mode = 2
 shortcut = null
 text = "Sell All"
 flat = false
 
-[node name="buy" type="Tabs" parent="space_station/shop_ui/Panel/shop_tabs"]
+[node name="buy" type="Tabs" parent="space_station/shop_ui/shop_panel/shop_tabs"]
 
 visibility/visible = false
 anchor/right = 1
@@ -426,8 +466,64 @@ margin/top = 34.0
 margin/right = 4.0
 margin/bottom = 4.0
 
-[connection signal="pressed" from="space_station/shop_ui/Panel/shop_tabs/sell/minerals/minerals_button" to="space_station/shop_ui" method="_on_minerals_button_pressed"]
+[node name="fuel" type="Node2D" parent="space_station/shop_ui/shop_panel/shop_tabs/buy"]
 
-[connection signal="pressed" from="space_station/shop_ui/Panel/shop_tabs/sell/minerals/all_button" to="space_station/shop_ui" method="_on_all_button_pressed"]
+[node name="fuel_label" type="Label" parent="space_station/shop_ui/shop_panel/shop_tabs/buy/fuel"]
+
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = 53.0
+margin/top = 34.0
+margin/right = 241.0
+margin/bottom = 48.0
+custom_fonts/font = ExtResource( 16 )
+text = "10 % Fuel for 100 cr"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="fuel_button" type="Button" parent="space_station/shop_ui/shop_panel/shop_tabs/buy/fuel"]
+
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 55.0
+margin/top = 53.0
+margin/right = 102.0
+margin/bottom = 73.0
+custom_fonts/font = ExtResource( 16 )
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+text = "Buy"
+flat = false
+
+[node name="fuel_all_button" type="Button" parent="space_station/shop_ui/shop_panel/shop_tabs/buy/fuel"]
+
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 121.0
+margin/top = 53.0
+margin/right = 235.0
+margin/bottom = 73.0
+custom_fonts/font = ExtResource( 16 )
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+text = "Fill \'er up"
+flat = false
+
+[connection signal="pressed" from="space_station/shop_ui/shop_panel/shop_tabs/sell/minerals/minerals_button" to="space_station/shop_ui" method="_on_minerals_button_pressed"]
+
+[connection signal="pressed" from="space_station/shop_ui/shop_panel/shop_tabs/sell/minerals/minerals_all_button" to="space_station/shop_ui" method="_on_minerals_all_button_pressed"]
+
+[connection signal="pressed" from="space_station/shop_ui/shop_panel/shop_tabs/buy/fuel/fuel_button" to="space_station/shop_ui" method="_on_fuel_button_pressed"]
+
+[connection signal="pressed" from="space_station/shop_ui/shop_panel/shop_tabs/buy/fuel/fuel_all_button" to="space_station/shop_ui" method="_on_fuel_all_button_pressed"]
 
 

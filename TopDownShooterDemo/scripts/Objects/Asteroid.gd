@@ -80,3 +80,4 @@ func _death():
 	
 func deal_damage(damage):
 	curr_health -= damage
+	
